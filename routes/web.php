@@ -15,10 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin'], function() {
-    Route::get('work/create', 'Admin\WorkController@add')->middleware('auth');
-    Route::get('work/edit', 'Admin\WorkController@edit')->middleware('auth');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+    Route::get('work/create', 'Admin\WorkController@add');
+    Route::post('work/create', 'Admin\WorkController@create');
+    Route::get('work/edit', 'Admin\WorkController@edit');
+    Route::post('work/edit', 'Admin\WorkController@update');
 });
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
