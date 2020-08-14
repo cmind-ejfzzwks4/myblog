@@ -16,6 +16,9 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function() {
-    Route::get('work/create', 'Admin\WorkController@add');
-    Route::get('work/edit', 'Admin\WorkController@edit');
+    Route::get('work/create', 'Admin\WorkController@add')->middleware('auth');
+    Route::get('work/edit', 'Admin\WorkController@edit')->middleware('auth');
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
