@@ -14,3 +14,14 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+    Route::get('work/create', 'Admin\WorkController@add');
+    Route::post('work/create', 'Admin\WorkController@create');
+    Route::get('work/edit', 'Admin\WorkController@edit');
+    Route::post('work/edit', 'Admin\WorkController@update');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
