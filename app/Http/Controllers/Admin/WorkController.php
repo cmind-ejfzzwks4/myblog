@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 
 // 以下を追記することでWork Modelが扱えるようになる
 use App\Work;
+// 以下を追記することでHistory Modelが扱えるようになる
+use App\History;
+
+use Carbon\Carbon;
 
 class WorkController extends Controller
 {
@@ -72,25 +76,30 @@ class WorkController extends Controller
         // Validationをかける
         $this->validate($request, Work::$rules);
         // Work Modelからデータを取得する
-        $work = Work::find($request->id);
+        $work = Work::find($request->input('id'));
         // 送信されてきたフォームデータを格納する
         $form = $request->all();
-        // フォームから資料ファイルが送信されてきたら、保存して、$work->file に資料ファイルのパスを保存する
-        if (isset($form['file'])) {
-          $path = $request->file('file')->store('public/file');
-          $work->file = basename($path);
-          unset($form['file']);
-          //参考資料を削除のチェックボックスにチェックがついたら処理される
-        } elseif (0 == strcmp($request->remove, 'true')) {
-          $work->file = null;
+        if ($request->input('remove')) {
+            $form['file'] = null;
+        } elseif ($request->file('file')) {
+            $path = $request->file('file')->store('public/file');
+            $form['file'] = basename($path);
+        } else {
+            $form['file'] = $work->file;
         }
         unset($form['_token']);
+        unset($form['file']);
         unset($form['remove']);
   
         // 該当するデータを上書きして保存する(※省略形)
         $work->fill($form)->save();
+
+        $history = new History;
+        $history->work_id = $work->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
   
-        return redirect('admin/work');
+        return redirect('admin/work/');
     }
 
     public function delete(Request $request)

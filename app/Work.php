@@ -11,4 +11,10 @@ class Work extends Model
     public static $rules = array(
         'name' => 'required',
     );
+
+    // Workモデルに関連付けを行う
+    public function histories()
+    {
+        return $this->hasMany('App\History');
+    }
 }
