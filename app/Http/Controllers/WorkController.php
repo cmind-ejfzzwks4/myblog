@@ -26,7 +26,7 @@ class WorkController extends Controller
         }
 
         // work/index.blade.php ファイルを渡している
-        // また View テンプレートに headline、 posts、 cond_title という変数を渡している
+        // また View テンプレートに headline、 posts、 cond_name という変数を渡している
         return view('work.index', ['headline' => $headline, 'posts' => $posts, 'cond_name' => $cond_name]);
     }
 }
