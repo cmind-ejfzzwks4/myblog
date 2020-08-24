@@ -104,10 +104,10 @@ class WorkController extends Controller
 
     public function delete(Request $request)
     {
-        // 該当するNews Modelを取得
-        $news = Work::find($request->id);
+        // 該当するWork Modelを取得
+        $work = Work::find($request->id);
         // 削除する
-        $news->delete();
+        $work->delete();
         return redirect('admin/work/');
     }  
 }
